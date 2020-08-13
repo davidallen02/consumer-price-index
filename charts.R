@@ -4,6 +4,7 @@ library(magrittr)
 
 # Headline Monthly Percent Change ---------------------------------------------------
 pamngr::get_data("cpi_indx") %>%
+  reshape2::melt(id.vars = "dates") %>%
   dplyr::mutate(
     m_chg = value %>% 
       subtract(dplyr::lag(value)) %>% 
@@ -24,6 +25,7 @@ pamngr::get_data("cpi_indx") %>%
 
 # Core Monthly Percent Change -------------------------------------------------------
 pamngr::get_data("cpupaxfe") %>%
+  reshape2::melt(id.vars = "dates") %>%
   dplyr::mutate(
     m_chg = value %>% 
       subtract(dplyr::lag(value)) %>% 
@@ -46,8 +48,8 @@ pamngr::get_data("cpupaxfe") %>%
 # Headline, Core Annual Change ------------------------------------------------------
 
 dplyr::left_join(
-  x = pamngr::get_data("cpi_indx") %>% pamngr::pchange(k = 12),
-  y = pamngr::get_data("cpupaxfe") %>% pamngr::pchange(k = 12), 
+  x = pamngr::get_data("cpi_indx") %>% reshape2::melt(id.vars = "dates") %>% pamngr::pchange(k = 12),
+  y = pamngr::get_data("cpupaxfe") %>% reshape2::melt(id.vars = "dates") %>% pamngr::pchange(k = 12), 
   by = "dates") %>%
   set_colnames(c("dates", "Headline CPI", "Core CPI")) %>%
   dplyr::slice_max(dates, n = 120) %>%
@@ -63,17 +65,17 @@ dplyr::left_join(
 
 # Category Monthly Change -----------------------------------------------------------
 
-df1  <- pamngr::get_data("cpsfhome") %>% pamngr::pchange() %>% set_colnames(c("dates", "cpsfhome"))
-df2  <- pamngr::get_data("cpiqfafs") %>% pamngr::pchange() %>% set_colnames(c("dates", "cpiqfafs"))
-df3  <- pamngr::get_data("cpupencm") %>% pamngr::pchange() %>% set_colnames(c("dates", "cpupencm"))
-df4  <- pamngr::get_data("cpshge")  %>% pamngr::pchange() %>% set_colnames(c("dates", "cpshge"))
-df5  <- pamngr::get_data("cpstnv") %>% pamngr::pchange() %>% set_colnames(c("dates", "cpstnv"))
-df6  <- pamngr::get_data("cpstuctr") %>% pamngr::pchange() %>% set_colnames(c("dates", "cpstuctr"))
-df7  <- pamngr::get_data("cpsctot") %>% pamngr::pchange() %>% set_colnames(c("dates", "cpsctot"))
-df8  <- pamngr::get_data("cpumcmdy") %>% pamngr::pchange() %>% set_colnames(c("dates", "cpumcmdy"))
-df9  <- pamngr::get_data("cpshshlt")   %>% pamngr::pchange() %>% set_colnames(c("dates", "cpshshlt"))
-df10 <- pamngr::get_data("cpsstran") %>% pamngr::pchange() %>% set_colnames(c("dates", "cpsstran"))
-df11 <- pamngr::get_data("cpumserv") %>% pamngr::pchange() %>% set_colnames(c("dates", "cpumserv"))
+df1  <- pamngr::get_data("cpsfhome") %>% reshape2::melt(id.vars = "dates") %>% dplyr::select(c("dates","value")) %>% pamngr::pchange() %>% set_colnames(c("dates", "cpsfhome"))
+df2  <- pamngr::get_data("cpiqfafs")%>% reshape2::melt(id.vars = "dates") %>% dplyr::select(c("dates","value")) %>% pamngr::pchange() %>% set_colnames(c("dates", "cpiqfafs"))
+df3  <- pamngr::get_data("cpupencm")%>% reshape2::melt(id.vars = "dates")%>% dplyr::select(c("dates","value")) %>% pamngr::pchange() %>% set_colnames(c("dates", "cpupencm"))
+df4  <- pamngr::get_data("cpshge")%>% reshape2::melt(id.vars = "dates")%>% dplyr::select(c("dates","value"))  %>% pamngr::pchange() %>% set_colnames(c("dates", "cpshge"))
+df5  <- pamngr::get_data("cpstnv")%>% reshape2::melt(id.vars = "dates")%>% dplyr::select(c("dates","value")) %>% pamngr::pchange() %>% set_colnames(c("dates", "cpstnv"))
+df6  <- pamngr::get_data("cpstuctr")%>% reshape2::melt(id.vars = "dates") %>% dplyr::select(c("dates","value"))%>% pamngr::pchange() %>% set_colnames(c("dates", "cpstuctr"))
+df7  <- pamngr::get_data("cpsctot")%>% reshape2::melt(id.vars = "dates")%>% dplyr::select(c("dates","value")) %>% pamngr::pchange() %>% set_colnames(c("dates", "cpsctot"))
+df8  <- pamngr::get_data("cpumcmdy")%>% reshape2::melt(id.vars = "dates") %>% dplyr::select(c("dates","value"))%>% pamngr::pchange() %>% set_colnames(c("dates", "cpumcmdy"))
+df9  <- pamngr::get_data("cpshshlt")%>% reshape2::melt(id.vars = "dates") %>% dplyr::select(c("dates","value"))  %>% pamngr::pchange() %>% set_colnames(c("dates", "cpshshlt"))
+df10 <- pamngr::get_data("cpsstran")%>% reshape2::melt(id.vars = "dates")%>% dplyr::select(c("dates","value")) %>% pamngr::pchange() %>% set_colnames(c("dates", "cpsstran"))
+df11 <- pamngr::get_data("cpumserv")%>% reshape2::melt(id.vars = "dates") %>% dplyr::select(c("dates","value"))%>% pamngr::pchange() %>% set_colnames(c("dates", "cpumserv"))
 
 
 dat <- dplyr::left_join(df1, df2, by = "dates") %>%

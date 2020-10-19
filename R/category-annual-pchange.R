@@ -38,5 +38,6 @@ p <- dat %>%
     plot_title = "Consumer Price Index",
     plot_subtitle = paste(period, "Annual Percent Change, Seasonally Adjusted"),
     show_legend = FALSE
-  ) %>%
-  pamngr::all_output("category_annual_pchange")
+  ) 
+
+p %>%  pamngr::all_output("category-annual-pchange")

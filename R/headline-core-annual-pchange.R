@@ -8,4 +8,4 @@ pamngr::join_sheets(c("cpi indx", "cpupaxfe")) %>%
     plot_title = "Consumer Price Index",
     plot_subtitle = "Annual Percent Change, Seasonally Adjusted"
   ) %>%
-  pamngr::all_output("annual-pchange")
+  pamngr::all_output("headline-core-annual-pchange")
